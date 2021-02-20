@@ -27,7 +27,7 @@ def data():
 
 
 @app.route('/ml/<movie_name>')
-def ml(movie_name="Harry Potter and the Half-Blood Prince"):
+def ml(movie_name=str("Child 44")):
     connection = engine.connect()
     df = pd.read_sql("SELECT * FROM info",connection)
     features = ['keywords', 'cast', 'genres', 'director']
@@ -42,7 +42,7 @@ def ml(movie_name="Harry Potter and the Half-Blood Prince"):
     # print("Count Matrix:", count_matrix.toarray())
     cosine_sim = cosine_similarity(count_matrix)
     records = df.to_json(orient='records')
-    movie_user_likes = movie_name
+    movie_user_likes = str(movie_name)
 
     def get_index_from_title(title):
         value = df.index[df['title'] == title].tolist()
