@@ -8,6 +8,10 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Dashboard</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- loader-->
     <link href="{{ url_for('static', filename='assets/css/pace.min.css') }}" rel="stylesheet" />
@@ -28,6 +32,7 @@
     <link href="{{ url_for('static', filename='assets/css/sidebar-menu.css') }}" rel="stylesheet" />
     <!-- Custom Style-->
     <link href="{{ url_for('static', filename='assets/css/app-style.css') }}" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#livebox').on("input", function(e) {
@@ -42,19 +47,23 @@
                         success: function(res) {
                             let data = "<div class='list-group'>";
                             $.each(res, function(index, value) {
-                                console.log(value[0]);
+                                //console.log(value[0]);
                                 data += "<p class='list-group-item list-group-item-action'>" + value[0] + "</p>";
 
                             });
                             data += "</div>";
-                            $("#datalist").html(data).show()
-                                //console.log(res);
+                            $("#datalist").html(data)
+
                         }
                     })
+                    // $('#list-group').selectpicker('refresh');
                     //console.log(search_text);
                     // event.preventDefault();
             });
         })
+        d3.selectAll(".list-group-item").on("click", () => {
+            console.log(d3.select(this).select("text"));
+        });
     </script>
 
 </head>
@@ -120,7 +129,7 @@
                         <form class="search-bar">
                             <input type="text" id='livebox' class="form-control" placeholder="Enter movie name" autocomplete="off" required>
                             <p id="datalist"></p>
-                            <!-- <a href="javascript:void();"><i class="icon-magnifier"></i></a> -->
+
                         </form>
                     </li>
                 </ul>
