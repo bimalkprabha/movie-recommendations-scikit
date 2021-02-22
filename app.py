@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import sqlite3
 
 
 app = Flask(__name__)
@@ -59,6 +60,22 @@ def ml(movie_name=str("Child 44")):
         get_title_from_index(movie[0])
     # print(recommnedations[0:15])
     return jsonify(recommnedations[1:15])
+# 
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get("text")
+    conn = sqlite3.connect('resources/data.db')
+    cursor = conn.cursor()
+    
+    # con = sql.connect("DIMOP.db")
+    # searchbox = "Batman"
+    cursor.execute("""SELECT title FROM info WHERE title LIKE ?""", ('%'+searchbox+'%',))
+    data = cursor.fetchall()
+    return jsonify(data)
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
