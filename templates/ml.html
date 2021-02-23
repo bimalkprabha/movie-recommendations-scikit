@@ -8,6 +8,11 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Dashboard</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- loader-->
     <link href="{{ url_for('static', filename='assets/css/pace.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='assets/js/pace.min.js') }}"></script>
@@ -27,6 +32,66 @@
     <link href="{{ url_for('static', filename='assets/css/sidebar-menu.css') }}" rel="stylesheet" />
     <!-- Custom Style-->
     <link href="{{ url_for('static', filename='assets/css/app-style.css') }}" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#livebox').keyup(function() {
+                //$("#datalist").empty();
+                search_text = $('#livebox').val();
+                $.ajax({
+                    method: "post",
+                    url: "/livesearch",
+                    data: {
+                        text: search_text
+                    },
+                    success: function(res) {
+                        let data = "<div class='list-group'>";
+                        $.each(res, function(index, value) {
+                            //console.log(value[0]);
+                            data += `<li class='list-group-item list-group-item-action' id='${index}-list-item' onclick='postElement("${value[0]}")'>` + value[0] + "</li>";
+                        });
+                        data += "</div>";
+                        $("#datalist").html(data).show()
+
+                    }
+                });
+
+            });
+        });
+        //console.log(document.getElementById("clickMe1"));
+
+        function machine_learning(search_data) {
+            $.ajax({
+                method: "post",
+                url: "/ml_1",
+                data: {
+                    text: search_data
+                },
+                success: function(res) {
+
+                    console.log(res);
+
+                }
+            });
+        }
+
+        function postElement(text) {
+            $('#livebox').val(text);
+            //Hiding "display" div in "search.php" file.
+            //$('#datalist').hide();
+
+            //console.log(text);
+            d3.json("/data", function(error, data) {
+                //  do something with `data` here 
+                //console.log(data);
+                let filteredData = data.filter(ele => ele.title === text);
+                console.log(filteredData[0].title);
+                machine_learning(filteredData[0].title)
+            });
+            $('#datalist').hide();
+
+        }
+    </script>
 
 </head>
 
@@ -89,8 +154,9 @@
                     </li>
                     <li class="nav-item">
                         <form class="search-bar">
-                            <input type="text" class="form-control" placeholder="Enter keywords">
-                            <a href="javascript:void();"><i class="icon-magnifier"></i></a>
+                            <input type="text" id='livebox' class="form-control" placeholder="Enter movie name" autocomplete="off" required>
+                            <div id="datalist"></div>
+
                         </form>
                     </li>
                 </ul>
@@ -353,5 +419,6 @@
 
 
 </body>
+
 
 </html>

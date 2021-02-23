@@ -43,6 +43,21 @@
         });
         //console.log(document.getElementById("clickMe1"));
 
+        function machine_learning(search_data) {
+            $.ajax({
+                method: "post",
+                url: "/ml_1",
+                data: {
+                    text: search_data
+                },
+                success: function(res) {
+
+                    console.log(res);
+
+                }
+            });
+        }
+
         function postElement(text) {
             $('#livebox').val(text);
             //Hiding "display" div in "search.php" file.
@@ -53,7 +68,8 @@
                 //  do something with `data` here 
                 //console.log(data);
                 let filteredData = data.filter(ele => ele.title === text);
-                console.log(filteredData);
+                console.log(filteredData[0].title);
+                machine_learning(filteredData[0].title)
             });
             $('#datalist').hide();
 

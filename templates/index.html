@@ -32,11 +32,11 @@
     <link href="{{ url_for('static', filename='assets/css/sidebar-menu.css') }}" rel="stylesheet" />
     <!-- Custom Style-->
     <link href="{{ url_for('static', filename='assets/css/app-style.css') }}" rel="stylesheet" />
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#livebox').on("input", function(e) {
-                $("#datalist").empty();
+            $('#livebox').keyup(function() {
+
                 search_text = $('#livebox').val();
                 $.ajax({
                     method: "post",
@@ -48,27 +48,45 @@
                         let data = "<div class='list-group'>";
                         $.each(res, function(index, value) {
                             //console.log(value[0]);
-                            data += `<p class='list-group-item list-group-item-action' id='${index}-list-item' onclick='postElement("${value[0]}")'>` + value[0] + "</p>";
+                            data += `<li class='list-group-item list-group-item-action' id='${index}-list-item' onclick='postElement("${value[0]}")'>` + value[0] + "</li>";
                         });
                         data += "</div>";
-                        $("#datalist").html(data)
+                        $("#datalist").html(data).show()
 
                     }
-                })
+                });
 
             });
-        })
-        console.log(document.getElementById("clickMe1"));
+        });
+        //console.log(document.getElementById("clickMe1"));
+
+        function machine_learning(search_data) {
+            $.ajax({
+                method: "post",
+                url: "/ml_1",
+                data: {
+                    text: search_data
+                },
+                success: function(res) {
+
+                    console.log(res);
+
+                }
+            });
+        }
 
         function postElement(text) {
-            movie_name = text;
-            console.log(movie_name);
-            d3.json('/data', function(ele) {
-                console.log(ele);
-                let filteredData = data_one.filter(ele => ele.title === movie_name);
-                console.log(filteredData);
-            });
+            $('#livebox').val(text);
 
+            d3.json("/data", function(error, data) {
+
+                let filteredData = data.filter(ele => ele.title === text);
+                console.log(filteredData[0]);
+                console.log(filteredData[0].title);
+                //machine_learning(filteredData[0].title)
+            });
+            //Hiding "display" div in  file.
+            $('#datalist').hide();
 
         }
     </script>
@@ -135,7 +153,7 @@
                     <li class="nav-item">
                         <form class="search-bar">
                             <input type="text" id='livebox' class="form-control" placeholder="Enter movie name" autocomplete="off" required>
-                            <p id="datalist"></p>
+                            <div id="datalist"></div>
 
                         </form>
                     </li>
