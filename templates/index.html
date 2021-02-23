@@ -39,31 +39,38 @@
                 $("#datalist").empty();
                 search_text = $('#livebox').val();
                 $.ajax({
-                        method: "post",
-                        url: "/livesearch",
-                        data: {
-                            text: search_text
-                        },
-                        success: function(res) {
-                            let data = "<div class='list-group'>";
-                            $.each(res, function(index, value) {
-                                //console.log(value[0]);
-                                data += "<p class='list-group-item list-group-item-action'>" + value[0] + "</p>";
+                    method: "post",
+                    url: "/livesearch",
+                    data: {
+                        text: search_text
+                    },
+                    success: function(res) {
+                        let data = "<div class='list-group'>";
+                        $.each(res, function(index, value) {
+                            //console.log(value[0]);
+                            data += `<p class='list-group-item list-group-item-action' id='${index}-list-item' onclick='postElement("${value[0]}")'>` + value[0] + "</p>";
+                        });
+                        data += "</div>";
+                        $("#datalist").html(data)
 
-                            });
-                            data += "</div>";
-                            $("#datalist").html(data)
+                    }
+                })
 
-                        }
-                    })
-                    // $('#list-group').selectpicker('refresh');
-                    //console.log(search_text);
-                    // event.preventDefault();
             });
         })
-        d3.selectAll(".list-group-item").on("click", () => {
-            console.log(d3.select(this).select("text"));
-        });
+        console.log(document.getElementById("clickMe1"));
+
+        function postElement(text) {
+            movie_name = text;
+            console.log(movie_name);
+            d3.json('/data', function(ele) {
+                console.log(ele);
+                let filteredData = data_one.filter(ele => ele.title === movie_name);
+                console.log(filteredData);
+            });
+
+
+        }
     </script>
 
 </head>
