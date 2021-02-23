@@ -8,18 +8,14 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Dashboard</title>
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <!-- loader-->
     <link href="{{ url_for('static', filename='assets/css/pace.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='assets/js/pace.min.js') }}"></script>
     <!--favicon-->
     <link rel="icon" href="{{ url_for('static', filename='assets/images/logo-icon.png') }}" type="image/x-icon">
     <!-- Vector CSS -->
-    <link href="{{ url_for('static', filename='assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
+    <!-- <link href="{{ url_for('static', filename='assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" /> -->
     <!-- simplebar CSS-->
     <link href="{{ url_for('static', filename='assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <!-- Bootstrap core CSS-->
@@ -32,7 +28,10 @@
     <link href="{{ url_for('static', filename='assets/css/sidebar-menu.css') }}" rel="stylesheet" />
     <!-- Custom Style-->
     <link href="{{ url_for('static', filename='assets/css/app-style.css') }}" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- Resources -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(function() {
             $('#livebox').keyup(function() {
@@ -59,6 +58,7 @@
             });
         });
         //console.log(document.getElementById("clickMe1"));
+        let filteredData;
 
         function machine_learning(search_data) {
             $.ajax({
@@ -80,9 +80,9 @@
 
             d3.json("/data", function(error, data) {
 
-                let filteredData = data.filter(ele => ele.title === text);
-                console.log(filteredData[0]);
-                console.log(filteredData[0].title);
+                filteredData = data.filter(ele => ele.title === text);
+                //console.log(filteredData[0]);
+                //console.log(filteredData[0].title);
                 //machine_learning(filteredData[0].title)
             });
             //Hiding "display" div in  file.
@@ -216,14 +216,12 @@
                 <div class="row">
                     <div class="col-12 col-lg-8 col-xl-8">
                         <div class="card">
-                            <div class="card-header">Movie Traffic </div>
+                            <div class="card-header">Most Popular Movies </div>
                             <div class="card-body">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-white"></i>New Visitor</li>
-                                    <li class="list-inline-item"><i class="fa fa-circle mr-2 text-light"></i>Old Visitor</li>
-                                </ul>
+
                                 <div class="chart-container-1">
-                                    <canvas id="chart1"></canvas>
+                                    <!-- <canvas id="chart1"></canvas> -->
+                                    <div style="padding-bottom: 10px;" id="chart1"></div>
                                 </div>
                             </div>
 
@@ -293,32 +291,35 @@
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="card">
-                            <div class="card-header">Movie Data </div>
+                            <div class="card-header">Movie Table </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush table-borderless">
                                     <thead>
                                         <tr>
-                                            <th>Product</th>
-                                            <th>Photo</th>
-                                            <th>Product ID</th>
-                                            <th>Amount</th>
-                                            <th>Date</th>
-                                            <th>Shipping</th>
+                                            <th>Homepage</th>
+                                            <th>Popularity</th>
+                                            <th>Release Date</th>
+                                            <th>Title</th>
+                                            <th>Vote Average</th>
+                                            <th>Director</th>
+
+
+
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Iphone 5</td>
+                                    <tbody id="table1">
+                                        <!-- <tr> -->
+                                        <!-- <td>Iphone 5</td>
                                             <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
                                             <td>#9405822</td>
                                             <td>$ 1250.00</td>
                                             <td>03 Aug 2017</td>
                                             <td>
                                                 <div class="progress shadow" style="height: 3px;">
-                                                    <div class="progress-bar" role="progressbar" style="width: 90%"></div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 10%"></div>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </td> -->
+                                        <!-- </tr> -->
 
 
                                     </tbody>
@@ -405,7 +406,7 @@
     <!-- sidebar-menu js -->
     <script src="{{ url_for('static', filename='assets/js/sidebar-menu.js') }}"></script>
     <!-- loader scripts -->
-    <script src="{{ url_for('static', filename='assets/js/jquery.loading-indicator.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='assets/js/jquery.loading-indicator.js') }}"></script> -->
     <!-- Custom scripts -->
     <script src="{{ url_for('static', filename='assets/js/app-script.js') }}"></script>
     <!-- Chart js -->
@@ -414,6 +415,8 @@
 
     <!-- Index js -->
     <script src="{{ url_for('static', filename='assets/js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/cards.js') }}"></script>
+
 
 
 </body>
