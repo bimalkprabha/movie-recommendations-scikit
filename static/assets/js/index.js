@@ -47,6 +47,12 @@ d3.json('/data', function(res) {
         most_revenue = most_revenue.slice(0, 1)
             // console.log(most_budget[0].budget);
             //  Chart 1
+
+        let genres = data.map((ele) => ele.genres.split(" "))
+            //  To  find dsitinct genres
+        distinct_genres(genres)
+            // console.log(distinct_genres);
+
         chart_1(most_popular_10);
         // Table
         buildTable(most_popular_15)
@@ -56,7 +62,92 @@ d3.json('/data', function(res) {
         duration(most_duration)
             // Most Expensive
         revenue(most_revenue)
+
     }
+    //  Distinct Genres
+
+    function distinct_genres(genres) {
+
+        var words = [];
+        var counts = [];
+        genres.map(ele => {
+            calculate(ele)
+        });
+
+
+        function calculate(inputs) {
+            for (var i = 0; i < inputs.length; i++) {
+                var isExist = false;
+                for (var j = 0; j < words.length; j++) {
+                    if (inputs[i] == words[j]) {
+                        isExist = true
+                        counts[i] = counts[i] + 1;
+                    }
+                }
+                if (!isExist) {
+                    words.push(inputs[i]);
+                    counts.push(1);
+                }
+                isExist = false;
+            }
+        }
+
+        console.log(words);
+        console.log(counts);
+        // Radial 
+
+        genre_pie(words.slice(0, 6), counts.slice(0, 6));
+
+    }
+
+    function genre_pie(words, counts) {
+
+        var options = {
+            series: counts,
+            chart: {
+                width: 380,
+                type: 'donut',
+                foreColor: '#ffffff',
+            },
+            plotOptions: {
+
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            fill: {
+                type: 'gradient',
+            },
+            legend: {
+                formatter: function(val, opts) {
+                    return val + " - " + opts.w.globals.series[opts.seriesIndex]
+                }
+            },
+            labels: words,
+
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart_2"), options);
+        chart.render();
+
+    }
+
+
 
 
     function duration(most_duration) {

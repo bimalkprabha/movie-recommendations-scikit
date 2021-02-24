@@ -113,27 +113,11 @@
                     </a>
                 </li>
 
-                <!-- <li>
-                    <a href="icons.html">
-                        <i class="zmdi zmdi-invert-colors"></i> <span>UI Icons</span>
-                    </a>
-                </li> -->
-
-
                 <li>
                     <a href="{{ url_for('model') }}">
                         <i class="zmdi zmdi-grid"></i> <span>Recommendation</span>
                     </a>
                 </li>
-
-
-
-
-                <!-- 
-                <li class="sidebar-header">LABELS</li>
-                <li><a href="javaScript:void();"><i class="zmdi zmdi-coffee text-danger"></i> <span>Important</span></a></li>
-                <li><a href="javaScript:void();"><i class="zmdi zmdi-chart-donut text-success"></i> <span>Warning</span></a></li>
-                <li><a href="javaScript:void();"><i class="zmdi zmdi-share text-info"></i> <span>Information</span></a></li> -->
 
             </ul>
 
@@ -149,13 +133,7 @@
                             <i class="icon-menu menu-icon"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <form class="search-bar">
-                            <input type="text" id='livebox' class="form-control" placeholder="Enter movie name" autocomplete="off" required>
-                            <div id="datalist"></div>
 
-                        </form>
-                    </li>
                 </ul>
 
             </nav>
@@ -253,14 +231,15 @@
 
                     <div class="col-12 col-lg-4 col-xl-4">
                         <div class="card">
-                            <div class="card-header">Top Rated </div>
+                            <div class="card-header">Top Rated Based on Genre</div>
                             <div class="card-body">
                                 <div class="chart-container-2">
-                                    <canvas id="chart2"></canvas>
+                                    <div id="chart_2"></div>
+                                    <!-- <canvas id="chart2"></canvas> -->
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table align-items-center">
+                                <!-- <table class="table align-items-center">
                                     <tbody>
                                         <tr>
                                             <td><i class="fa fa-circle text-white mr-2"></i> Loreem</td>
@@ -283,7 +262,7 @@
                                             <td>+5%</td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table> -->
                             </div>
                         </div>
                     </div>
@@ -310,18 +289,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="table1">
-                                        <!-- <tr> -->
-                                        <!-- <td>Iphone 5</td>
-                                            <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                                            <td>#9405822</td>
-                                            <td>$ 1250.00</td>
-                                            <td>03 Aug 2017</td>
-                                            <td>
-                                                <div class="progress shadow" style="height: 3px;">
-                                                    <div class="progress-bar" role="progressbar" style="width: 10%"></div>
-                                                </div>
-                                            </td> -->
-                                        <!-- </tr> -->
 
 
                                     </tbody>

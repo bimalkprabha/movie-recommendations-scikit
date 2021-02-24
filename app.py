@@ -68,11 +68,12 @@ def ml(movie_name):
 # sorted_similar_movies
     recommnedations =[]
     def get_title_from_index(index):
-        # recommnedations.append(df[df.index == index].values[0])
         recommnedations.append(df[df.index == index]["title"].values[0])
+
     for movie in sorted_similar_movies:
         get_title_from_index(movie[0])
     # print(recommnedations[0:15])
+    
     return jsonify(recommnedations[1:15])
 
 @app.route('/ml_1',methods=["POST","GET"])
