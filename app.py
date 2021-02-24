@@ -14,9 +14,14 @@ engine = create_engine('sqlite:///resources/data.db')
 from flask import Flask
 app = Flask(__name__)
 
+@app.route('/home')
 @app.route('/')
-def hello():
+def index():
     return render_template('index.html')
+
+@app.route('/model')
+def model():
+    return render_template('ml.html')
 
 @app.route('/test')
 def test():
@@ -32,7 +37,11 @@ def data():
 
 
 @app.route('/ml/<movie_name>')
-def ml(movie_name=str("Child 44")):
+def ml(movie_name):
+    if not movie_name:
+        movie_name = "Child 44"
+
+    
     connection = engine.connect()
     df = pd.read_sql("SELECT * FROM info",connection)
     features = ['keywords', 'cast', 'genres', 'director']
@@ -59,6 +68,7 @@ def ml(movie_name=str("Child 44")):
 # sorted_similar_movies
     recommnedations =[]
     def get_title_from_index(index):
+        # recommnedations.append(df[df.index == index].values[0])
         recommnedations.append(df[df.index == index]["title"].values[0])
     for movie in sorted_similar_movies:
         get_title_from_index(movie[0])
