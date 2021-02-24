@@ -1,112 +1,18 @@
-// $(function() {
-//     "use strict";
-
-//      // chart 1
-
-// 		  var ctx = document.getElementById('chart1').getContext('2d');
-
-// 			var myChart = new Chart(ctx, {
-// 				type: 'line',
-// 				data: {
-// 					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-// 					datasets: [{
-// 						label: 'New Visitor',
-// 						data: [3, 3, 8, 5, 7, 4, 6, 4, 6, 3],
-// 						backgroundColor: '#fff',
-// 						borderColor: "transparent",
-// 						pointRadius :"0",
-// 						borderWidth: 3
-// 					}, {
-// 						label: 'Old Visitor',
-// 						data: [7, 5, 14, 7, 12, 6, 10, 6, 11, 5],
-// 						backgroundColor: "rgba(255, 255, 255, 0.25)",
-// 						borderColor: "transparent",
-// 						pointRadius :"0",
-// 						borderWidth: 1
-// 					}]
-// 				},
-// 			options: {
-// 				maintainAspectRatio: false,
-// 				legend: {
-// 				  display: false,
-// 				  labels: {
-// 					fontColor: '#ddd',  
-// 					boxWidth:40
-// 				  }
-// 				},
-// 				tooltips: {
-// 				  displayColors:false
-// 				},	
-// 			  scales: {
-// 				  xAxes: [{
-// 					ticks: {
-// 						beginAtZero:true,
-// 						fontColor: '#ddd'
-// 					},
-// 					gridLines: {
-// 					  display: true ,
-// 					  color: "rgba(221, 221, 221, 0.08)"
-// 					},
-// 				  }],
-// 				   yAxes: [{
-// 					ticks: {
-// 						beginAtZero:true,
-// 						fontColor: '#ddd'
-// 					},
-// 					gridLines: {
-// 					  display: true ,
-// 					  color: "rgba(221, 221, 221, 0.08)"
-// 					},
-// 				  }]
-// 				 }
-
-// 			 }
-// 			});  
-
-
-//     // chart 2
-
-// 		var ctx = document.getElementById("chart2").getContext('2d');
-// 			var myChart = new Chart(ctx, {
-// 				type: 'doughnut',
-// 				data: {
-// 					labels: ["Direct", "Affiliate", "E-mail", "Other"],
-// 					datasets: [{
-// 						backgroundColor: [
-// 							"#ffffff",
-// 							"rgba(255, 255, 255, 0.70)",
-// 							"rgba(255, 255, 255, 0.50)",
-// 							"rgba(255, 255, 255, 0.20)"
-// 						],
-// 						data: [5856, 2602, 1802, 1105],
-// 						borderWidth: [0, 0, 0, 0]
-// 					}]
-// 				},
-// 			options: {
-// 				maintainAspectRatio: false,
-// 			   legend: {
-// 				 position :"bottom",	
-// 				 display: false,
-// 				    labels: {
-// 					  fontColor: '#ddd',  
-// 					  boxWidth:15
-// 				   }
-// 				}
-// 				,
-// 				tooltips: {
-// 				  displayColors:false
-// 				}
-// 			   }
-// 			});
-
-
-
-
-//    });
-
-// const table = d3.select("table")
-
 const tbody = d3.select("#table1");
+
+// currency formatter
+function num_Formatter(num) {
+    if (num > 999 && num < 1000000) {
+        return (num / 1000).toFixed(0) + 'K'; // convert to K for number from > 1000 < 1 million 
+    } else if (num > 1000000 && num < 1000000000) {
+        return (num / 1000000).toFixed(0) + ' Million'; // convert to M for number from > 1 million 
+    } else if (num > 1000000000) {
+        return (num / 1000000000).toFixed(0) + ' Billion'; // convert to M for number from > 1 million 
+    } else if (num < 900) {
+        return num; // if value < 1000, nothing to do
+    }
+}
+
 
 d3.json('/data', function(res) {
     // console.log(res);
@@ -116,19 +22,74 @@ d3.json('/data', function(res) {
 
     function render_chart(data) {
 
-        let popularity = data.map((ele) => ele.popularity);
+        const popularity = data.map((ele) => ele.popularity);
         let most_popular = data.sort(function(a, b) {
             return b.popularity - a.popularity;
         });
-        most_popular = most_popular.slice(0, 10)
-            // console.log(title.slice(0, 12));
-            // console.log(most_popular[0]);
+        most_popular_10 = most_popular.slice(0, 10)
+        most_popular_15 = most_popular.slice(0, 15)
+
+        let most_budget = data.sort(function(a, b) {
+            return b.budget - a.budget;
+        });
+        most_budget = most_budget.slice(0, 1)
+
+
+        let most_duration = data.sort(function(a, b) {
+            return b.runtime - a.runtime;
+        });
+        most_duration = most_duration.slice(0, 1)
+
+
+        let most_revenue = data.sort(function(a, b) {
+            return b.revenue - a.revenue;
+        });
+        most_revenue = most_revenue.slice(0, 1)
+            // console.log(most_budget[0].budget);
             //  Chart 1
-        chart_1(most_popular);
+        chart_1(most_popular_10);
         // Table
-        buildTable(most_popular)
+        buildTable(most_popular_15)
+            // Most Expensive
+        most_expensive(most_budget)
+            // Most Expensive
+        duration(most_duration)
+            // Most Expensive
+        revenue(most_revenue)
+    }
+
+
+    function duration(most_duration) {
+        let hours = Math.floor(most_duration[0].runtime / 60);
+        let minutes = most_duration[0].runtime % 60;
+        let run_div = d3.select("#most_duration")
+            .append("h5")
+            .attr("class", "mb-0")
+            .text(`${hours} Hr: ${minutes} min`)
 
     }
+
+
+    function revenue(most_revenue) {
+        let val = num_Formatter(most_revenue[0].revenue)
+        let most_div = d3.select("#most_revenue")
+            .append("h5")
+            .attr("class", "mb-0")
+            .text(val)
+
+    }
+
+    function most_expensive(most_budget) {
+        let val = num_Formatter(most_budget[0].budget)
+        let most_div = d3.select("#most_budget")
+            .append("h5")
+            .attr("class", "mb-0")
+            .text(val)
+
+
+    }
+
+
 
     function buildTable(data) {
         // First, clear out any existing data
@@ -200,7 +161,7 @@ d3.json('/data', function(res) {
                 data: x2
             }],
             chart: {
-                height: 250,
+                height: 280,
                 type: 'area',
                 foreColor: '#ffffff',
                 toolbar: {
