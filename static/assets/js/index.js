@@ -63,7 +63,17 @@ d3.json('/data', function(res) {
             // Most Expensive
         revenue(most_revenue)
 
+        directors()
+
+
+
+
+
     }
+
+
+    // Directors and movies
+
     //  Distinct Genres
 
     function distinct_genres(genres) {
@@ -319,4 +329,33 @@ d3.json('/data', function(res) {
 
     }
 
+});
+
+
+$(document).on('click', '.submit', function(e) {
+    e.preventDefault();
+    var direction = this.value;
+    var data = $('#limesurvey').serialize() + "&move=" + direction;
+    $.ajax("//yoursurveydomain.com/index.php/survey", {
+        cache: false,
+        type: "POST",
+        data: data,
+        success: function(response) {
+            var $data = $(response);
+            var limesurvey = $data.find("#limesurvey").html();
+            if (typeof limesurvey !== "undefined") {
+                $('#limesurvey').html(limesurvey);
+                loadScripts();
+            } else {
+                //this will be a quota/term/complete or some other page without questions
+                $('div.outerframe.clearfix').html($data.filter('div.outerframe.clearfix').html());
+            }
+        },
+        error: function(response) {
+
+        }
+    }).done(function() {
+        //trigger any doc ready scripts we may have just loaded
+        jQuery.ready();
+    });
 });
