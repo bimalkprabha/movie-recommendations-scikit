@@ -53,7 +53,10 @@
                         $("#datalist").html(data).show()
 
                     }
-                });
+                }).done(function() {
+                    //trigger any doc ready scripts we may have just loaded
+                    jQuery.ready();
+                });;
 
             });
         });
@@ -68,17 +71,13 @@
                     text: search_data
                 },
                 success: function(res) {
-                    console.log(res);
+                    //console.log(res);
                     get_movie_details(res);
-                    /*let row = $('#table_1').append('<tr>');
-                    for (var i = 0; i < res.length; i++) {
-                        row.append($('<td>').html(res[i]));
-                        //console.log(res[i]);
-                    }
-                    $('table_1').append(row + '</tr>');*/
-
 
                 }
+            }).done(function() {
+                //trigger any doc ready scripts we may have just loaded
+                jQuery.ready();
             });
         }
 
@@ -91,7 +90,7 @@
                 d3.json('/data', function(res) {
                     let row = tbody.append("tr");
                     g = res.filter(ele => ele.title === e);
-                    console.log(g[0]);
+                    //console.log(g[0]);
                     Object.entries(g[0]).forEach(([key, val]) => {
 
                         if (key == "title") {
@@ -129,16 +128,6 @@
                 });
             });
         }
-
-
-
-        //console.log(ass);
-        /*let row = $('#table_1').append('<tr>');
-        for (var i = 0; i < filter_movies.length; i++) {
-            row.append($('<td>').html(filter_movies[i]));
-            //console.log(res[i]);
-        }
-        $('table_1').append(row + '</tr>');*/
 
 
         function postElement(text) {
